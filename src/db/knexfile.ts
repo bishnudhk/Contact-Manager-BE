@@ -13,7 +13,7 @@ const config: { [key: string]: Knex.Config } = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      ssl: { rejectUnauthorized: false },
+     
       port: 5000,
     },
     pool: {
@@ -31,7 +31,7 @@ const config: { [key: string]: Knex.Config } = {
       user: process.env.DB_USER,
       host: process.env.DB_HOST,
       password: process.env.DB_PASSWORD,
-      ssl: { rejectUnauthorized: false },
+   
       port: 5000,
 
     },

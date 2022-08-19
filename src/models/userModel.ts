@@ -2,7 +2,7 @@ import db from "../db/db";
 import { UserToCreate, UserToGet, User } from "../domain/Users";
 
 class UserAccount {
-  public static table = "contact_account";
+  public static table = "user_account";
 
   /**
    * return id, email, firstname and lastname of all users
@@ -10,10 +10,10 @@ class UserAccount {
    */
   public static async getAllUsers(): Promise<UserToGet[]> {
     const users: UserToGet[] = await db(UserAccount.table).select(
-      "user_id",
+      "id",
       "email"
     );
-
+  console.log(users);
     return users;
   }
 
