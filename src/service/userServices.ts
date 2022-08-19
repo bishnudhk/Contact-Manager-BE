@@ -15,7 +15,7 @@ export const getAllUsers = async (): Promise<Success<UserToGet>> => {
   logger.info("Getting all users");
   try {
     const users = await UserModel.getAllUsers();
-
+   
     return {
       data: users,
       message: "User fetched successfully",
@@ -142,16 +142,17 @@ export const getUserByEmail = async (email: string): Promise<Success<User>> => {
 // };
 
 
-export const loginUser = async(email:string,password:string):Promise<Success<Token>>=>{
+export const loginUser = async(email:string,password:string)=>{
   const user = await UserModel.getUserByEmail(email);
   if(!user){
+    console.log(user);
       return{
           message:"Invalid email or password!"
   
       }
   }
 
-  // const isPasswordMatch = await bcrypt.compare(password,user.password);
+  
   // if(!isPasswordMatch){
   //     return{
   //         message:"Password do not match"
@@ -160,9 +161,9 @@ export const loginUser = async(email:string,password:string):Promise<Success<Tok
 
   // const accessToken  =  jwt.sign({userId:user.id},process.env.JWT_SECRET as string);
 
-  return {
+  // return {
       // data:{accessToken,userId:user.id},
-      message:"User logged in"
-  }
+      // message:"User logged in"
+  // }
 
 }
