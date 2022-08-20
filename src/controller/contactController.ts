@@ -42,22 +42,7 @@ export const createContact = (
   res: Response,
   next: NextFunction
 ) => {
-  const { name,  email, address, user_id, is_favourite } = req.body;
-
-  contactService
-    .createContact(
-      {
-        name,
-        // contact,
-        email,
-        address,
-        user_id,
-        is_favourite,
-      },
-      fileString
-    )
-    .then((data) => res.json(data))
-    .catch((error) => next(error));
+  contactService.createContact(req.body).then((data )=> res.json(data)).catch((err)=>next(err))
 };
 
 export const updateContact = (
@@ -65,24 +50,25 @@ export const updateContact = (
   res: Response,
   next: NextFunction
 ) => {
-  const { id, name, contact, email, address, user_id, is_favourite } = req.body;
-  const fileString = req.file?.path as string;
+  // const { id, name, contact, email, address, user_id, is_favourite } = req.body;
+  // const fileString = req.file?.path as string;
 
   contactService
-    .updateContact(
-      {
-        id,
-        name,
-        contact,
-        email,
-        address,
-        user_id,
-        is_favourite,
-      },
-      fileString
-    )
-    .then((data) => res.json(data))
-    .catch((error) => next(error));
+    // .updateContact(
+    //   {
+      console.log(req.body);
+    //     // id,
+    //     // name,
+    //     // contact,
+    //     // email,
+    //     // address,
+    //     // user_id,
+    //     // is_favourite,
+    //   },
+    //   fileString
+    // )
+    // .then((data) => res.json(data))
+    // .catch((error) => next(error));
 };
 
 export const deleteContact = (

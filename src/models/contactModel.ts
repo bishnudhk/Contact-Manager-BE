@@ -26,9 +26,12 @@ class ContactModel{
      }
 
      public static async createContact(contact:ContactToInsert){
+      console.log(contact);
+      
         const newContact = await db (ContactModel.table)
+        .where({ user_id: contact.user_id })
         .insert(contact)
-        .returning("*");
+        .returning("*"); 
 
         return newContact;
      }
