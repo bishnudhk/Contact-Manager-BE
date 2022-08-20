@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "../service/userServices";
-import bcrypt from "bcrypt"
+// import bcrypt from "bcrypt"
 
 /**
  * Get all users

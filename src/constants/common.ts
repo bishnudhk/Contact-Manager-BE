@@ -1,0 +1,1 @@
+export const salt_length = 10;

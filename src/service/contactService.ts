@@ -2,12 +2,12 @@ import Success from "../domain/Success";
 import logger from "../misc/logger";
 import {
   Contact,
-  ContactBeforeUpload,
+  ContactToInsert,
   ContactToUpdate,
 } from "../domain/Contact";
 import ContactModel from "../models/contactModel";
 import fs from "fs";
-import { resourceLimits } from "worker_threads";
+// import { resourceLimits } from "worker_threads";
 
 export const getAllContacts = async (id: number): Promise<Success<Contact>> => {
   logger.info("getting all contacts ");
@@ -28,64 +28,34 @@ export const getContactById = async (id: number): Promise<Success<Contact>> => {
 };
 
 export const getContactByName = async (
-  name: string
+  id: string
 ): Promise<Success<Contact>> => {
   logger.info("getting all contacts by name ");
-  const Contacts = await ContactModel.getContactByName(id);
+  const contacts = await ContactModel.getContactByName(id);
   return {
-    data: Contacts,
+    data: contacts,
     message: "contacts festched successfully ",
   };
 };
 
 export const createContact = async (
-  contact: ContactBeforeUpload,
-  filePath: string
-): Promise<Success<Contact>> => {
+  contact: ContactToInsert,
+  // filePath: string
+)=> {
   logger.info("creating a new contact");
-  try {
-    // checks if the file exists
-    if (!fs.existsSync(filePath)) {
-      throw new Error("File not found!!");
-    }
-    // uploads the image to cloudinary
-    // const result = await cloudinary.uploader.upload(filePath, {
-    //     resource_type: "image",
-    //     use_filename: true,
-    //     width: 500,
-    //     height: 500,
-    //     crop: "limit",
-    // });
-
-    // Delets the file from the server
-    fs.unlinkSync(filePath);
-
-    // create a new contact on the database
-    // const newContact = await ContactModel.createContact({
-    // ...contact,
-    // photo:result.url,
-    // });
-    // return {
-    //     data: newContact,
-    //     message: "Successfully created a contact",
-    //   };
-  } catch (error) {
-    //  logs the error
-    logger.error(error);
-
-    // Delete the file from the server
-    fs.unlinkSync(filePath);
-
-    return {
-      message: "could not create the contact ",
-    };
-  }
+  
+   const data= await ContactModel.createContact(contact);
+   return{
+    data:data,
+    message:"contact create successfully  ",
+   } 
+  
 };
 
 export const updateContact = async (
   contact: ContactToUpdate,
   filePath: string
-): Promise<Success<Contact>> => {
+)=> {
   logger.info("getting contact by id");
 
   try {

@@ -10,7 +10,9 @@ export async function up(knex: Knex): Promise<void> {
         table.string("address");
         table.string("photo").notNullable();
         table.boolean("is_favourite").defaultTo(false);
-        table.integer("user_id").notNullable().references("id").inTable("user_account").onDelete("CASCADE");
+        table.integer("user_id").notNullable().unsigned();
+        table.foreign("user_id").references("id").inTable("user_account");
+
 
     })
 }

@@ -3,6 +3,9 @@ import { User, UserToGet, UserToCreate } from "../domain/Users";
 import logger from "../misc/logger";
 import UserModel from "../models/userModel";
 import dotent from "dotenv";
+import { salt_length } from "../constants/common";
+import bcrypt from "bcrypt";
+// import Token from "../domain/Token";
 
 dotent.config({
   path: __dirname + "/../../.env",
@@ -33,14 +36,16 @@ export const createUser = async (
 ): Promise<Success<UserToGet>> => {
   // create password hash
   const { password } = user;
-  console.log(password);
+  const salt = await bcrypt.genSalt(salt_length);
+  const passwordHash = await bcrypt.hash(password,salt);
+  // console.log(password);
 
   logger.info("Creating a new user");
 
   try {
     const newUser: UserToGet = await UserModel.createUser({
       ...user,
-      password,
+      password:passwordHash,
     });
 
     return {
@@ -57,13 +62,15 @@ export const createUser = async (
 
 export const updateUser = async (user: User): Promise<Success<UserToGet>> => {
   const { password } = user;
-
-  
+  const salt = await bcrypt.genSalt(salt_length);
+  const passwordHash = await bcrypt.hash(password, salt);
   logger.info("Updating user");
+  
+  
   try {
     const updatedUser: UserToGet = await UserModel.updateUser({
       ...user,
-      password,
+      password:passwordHash,
     });
 
     return {
@@ -144,26 +151,39 @@ export const getUserByEmail = async (email: string): Promise<Success<User>> => {
 
 export const loginUser = async(email:string,password:string)=>{
   const user = await UserModel.getUserByEmail(email);
+  console.log(user);
   if(!user){
-    console.log(user);
+    // console.log(user);
       return{
           message:"Invalid email or password!"
   
       }
   }
 
+  if(user.password === password){
+  return{
+    message:"user login"
+  }
+  
+  }else{
+    return{
+      message:"Invalid password"
+    }
+  }
+  
+  //  const isPasswordMatch = await bcrypt.compare(password,user.password);
   
   // if(!isPasswordMatch){
-  //     return{
-  //         message:"Password do not match"
-  //     }
-  // }
+      // return{
+          // message:"Password do not match"
+      // }
+      return {
+        // data:{accessTok,userId:user.id},
+        message:"User logged in"
+    }
+  
+  }
 
   // const accessToken  =  jwt.sign({userId:user.id},process.env.JWT_SECRET as string);
 
-  // return {
-      // data:{accessToken,userId:user.id},
-      // message:"User logged in"
-  // }
-
-}
+ 
