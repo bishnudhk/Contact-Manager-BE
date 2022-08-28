@@ -24,25 +24,25 @@ const config: { [key: string]: Knex.Config } = {
       tableName: "knex_migrations",
     },
   },
-  production: {
-    client: process.env.DB_CLIENT,
-    connection: {
-      database: process.env.DB_NAME,
-      user: process.env.DB_USER,
-      host: process.env.DB_HOST,
-      password: process.env.DB_PASSWORD,
+  // production: {
+  //   client: process.env.DB_CLIENT,
+  //   connection: {
+  //     database: process.env.DB_NAME,
+  //     user: process.env.DB_USER,
+  //     host: process.env.DB_HOST,
+  //     password: process.env.DB_PASSWORD,
    
-      port: 5000,
+  //     port: 5000,
 
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-    migrations: {
-      tableName: "knex_migrations",
-    },
-  },
+  //   },
+  //   pool: {
+  //     min: 2,
+  //     max: 10,
+  //   },
+  //   migrations: {
+  //     tableName: "knex_migrations",
+  //   },
+  // },
 };
 
 export default config;

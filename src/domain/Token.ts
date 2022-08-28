@@ -1,6 +1,7 @@
 interface Token{
     accessToken:string;
-    userId:number
+    // refresh
+    // userId:number
 }
 
 export default Token;

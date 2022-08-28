@@ -7,10 +7,10 @@ class ContactModel{
 
     public static async getAllContacts(id:number){
         const allContacts = await db (ContactModel.table)
-        .select("id","name","contact","email","address","photo","is_favourite")
+        .select("user_id","first_name","last_name","mobile","email","address","photo","is_favourite")
         .where({user_id:id})
         .orderBy("is_favourite","desc")
-        .orderBy("name","desc");
+        .orderBy("first_name","desc");
         return allContacts;
     }
     
@@ -38,7 +38,8 @@ class ContactModel{
 
      public static async updateContact(contact:Contact){
         const updateContact = await db (ContactModel.table)
-        .where({ id:contact.id })
+        .where({ user_id:+contact.user_id })
+        .where({id:contact.id})
         .update(contact)
         .returning("*");
 

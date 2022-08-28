@@ -2,7 +2,6 @@ import dotent from "dotenv";
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
 import logger from "./misc/logger";
-// import { notFound, errorHandler } from "./middlewares";
 import { errorHandler } from './middlewares/errorHandler';
 import { notFound } from './middlewares/notFound';
 import appRouter from "./routes/index";
@@ -21,7 +20,7 @@ app.use(appRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   console.clear();

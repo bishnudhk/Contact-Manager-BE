@@ -50,25 +50,10 @@ export const updateContact = (
   res: Response,
   next: NextFunction
 ) => {
-  // const { id, name, contact, email, address, user_id, is_favourite } = req.body;
-  // const fileString = req.file?.path as string;
-
-  contactService
-    // .updateContact(
-    //   {
-      console.log(req.body);
-    //     // id,
-    //     // name,
-    //     // contact,
-    //     // email,
-    //     // address,
-    //     // user_id,
-    //     // is_favourite,
-    //   },
-    //   fileString
-    // )
-    // .then((data) => res.json(data))
-    // .catch((error) => next(error));
+  const { id } = req.params;
+  contactService.updateContact({...req.body, id})
+  .then((data)=> res.json(data))
+  .catch((err) => next (err));    
 };
 
 export const deleteContact = (
