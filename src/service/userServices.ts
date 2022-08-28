@@ -5,7 +5,8 @@ import UserModel from "../models/userModel";
 import dotent from "dotenv";
 import { salt_length } from "../constants/common";
 import bcrypt from "bcrypt";
-// import Token from "../domain/Token";
+import Token from "../domain/Token";
+import jwt from 'jsonwebtoken';
 
 dotent.config({
   path: __dirname + "/../../.env",
@@ -40,24 +41,27 @@ export const createUser = async (
   const passwordHash = await bcrypt.hash(password,salt);
   // console.log(password);
 
+  const insertedUser  = await UserModel.createUser({
+    ...user,password:passwordHash
+  })
   logger.info("Creating a new user");
 
-  try {
-    const newUser: UserToGet = await UserModel.createUser({
-      ...user,
-      password:passwordHash,
-    });
+  // try {
+  //   const newUser: UserToGet = await UserModel.createUser({
+  //     ...user,
+  //     password:passwordHash,
+  //   });
 
     return {
-      data: newUser,
+      data:insertedUser,
       message: "New user created successfully",
     };
-  } catch (err) {
-    logger.info(err);
-    return {
-      message: "Error creating new user",
-    };
-  }
+  // } catch (err) {
+  //   logger.info(err);
+  //   return {
+  //     message: "Error creating new user",
+  //   };
+  // }
 };
 
 export const updateUser = async (user: User): Promise<Success<UserToGet>> => {
@@ -149,41 +153,48 @@ export const getUserByEmail = async (email: string): Promise<Success<User>> => {
 // };
 
 
-export const loginUser = async(email:string,password:string)=>{
+export const loginUser = async(email:string,password:string)
+:Promise<Success<Token>> =>{
   const user = await UserModel.getUserByEmail(email);
-  console.log(user);
+  // console.log(user);
   if(!user){
-    // console.log(user);
+    
       return{
           message:"Invalid email or password!"
   
       }
   }
 
-  if(user.password === password){
-  return{
-    message:"user login"
+  // if(user.password === password){
+  // return{
+  //   message:"user login"
+  // }
+  
+  // }else{
+  //   return{
+  //     message:"Invalid password"
+  //   };
+  // }
+  
+   const isPasswordMatch = await bcrypt.compare(password,user.password);
+  
+  if(!isPasswordMatch){
+      return{
+          message:"Password do not match"
+      }
   }
-  
-  }else{
-    return{
-      message:"Invalid password"
-    }
-  }
-  
-  //  const isPasswordMatch = await bcrypt.compare(password,user.password);
-  
-  // if(!isPasswordMatch){
-      // return{
-          // message:"Password do not match"
-      // }
-      return {
-        // data:{accessTok,userId:user.id},
-        message:"User logged in"
-    }
-  
-  }
+  // console.log("user is logged in ");
+  // user is authenticated 
+  const accessToken  =  jwt.sign(
+    {user_Id:user.user_id},
+    process.env.JWT_SECRETE as string
+    );
 
-  // const accessToken  =  jwt.sign({userId:user.id},process.env.JWT_SECRET as string);
+    return {
+      data:{accessToken},
+      // data:user,
+      message:"User logged in"
+  }
+}
 
  

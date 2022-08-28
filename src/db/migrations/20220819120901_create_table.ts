@@ -3,11 +3,13 @@ import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable("contacts",(table) => {
-        table.increments('id');
-        table.string("name").notNullable();
-        table.string("contact").notNullable();
+        table.increments('id').primary().notNullable();
+        table.string("first_name").notNullable();
+        table.string("middle_name");
+        table.string("last_name").notNullable();
+        table.string("mobile").notNullable();
         table.string("email");
-        table.string("address");
+        table.string("company");
         table.string("photo").notNullable();
         table.boolean("is_favourite").defaultTo(false);
         table.integer("user_id").notNullable().unsigned();

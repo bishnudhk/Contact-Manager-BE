@@ -15,7 +15,18 @@ export interface UserToGet {
   email: string;
   first_name?: string;
   last_name?: string;
-  password:string;
 }
 
 export default User;
+
+interface AuthorizedRequest extends Request {
+  authUser?: number;
+}
+
+interface TokenPayload {
+  user_id: number;
+}
+
+export type DataStoredInToken = TokenPayload;
+
+export type AuthRequest = AuthorizedRequest;

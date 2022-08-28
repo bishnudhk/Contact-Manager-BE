@@ -1,31 +1,35 @@
-import { NextFunction, Request, Response } from "express";
-import logger from "../misc/logger";
+import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import CustomError from "../misc/customError";
-import { StatusCodes } from "http-status-codes";
+import {AuthRequest,DataStoredInToken} from '../domain/Users'
 
-const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
-  logger.info("Token Verification");
 
-  const bearerHeader = req.headers["authorization"];
 
-  if (typeof bearerHeader !== "undefined") {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    jwt.verify(
-      bearerToken,
-      process.env.JWT_SECRET as string,
-      (err, decoded) => {
-        if (err) {
-          next(new CustomError("Invalid token", StatusCodes.UNAUTHORIZED));
-        } else {
-          next();
-        }
-      }
-    );
-  } else {
-    next(new CustomError("Invalid token", StatusCodes.UNAUTHORIZED));
+const authenticate = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {  
+  // console.log("authenticate");
+  // next();
+  // console.log(req.headers);
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  // console.log(accessToken);
+
+  try {
+    const result = (await jwt.verify(
+      accessToken as string,
+      process.env.JWT_SECRETE as string
+    )) as DataStoredInToken;
+    
+    // console.log(result);
+    req.authUser = result.user_id;
+
+    next();
+  } catch (err) {
+    next(new CustomError("Invalid access token", 401));
   }
 };
 
-export default verifyToken;
+export default authenticate;
+

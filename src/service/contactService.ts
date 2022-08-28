@@ -1,12 +1,8 @@
 import Success from "../domain/Success";
 import logger from "../misc/logger";
-import {
-  Contact,
-  ContactToInsert,
-  ContactToUpdate,
-} from "../domain/Contact";
+import { Contact, ContactToInsert, ContactToUpdate } from "../domain/Contact";
 import ContactModel from "../models/contactModel";
-import fs from "fs";
+// import fs from "fs";
 // import { resourceLimits } from "worker_threads";
 
 export const getAllContacts = async (id: number): Promise<Success<Contact>> => {
@@ -39,62 +35,28 @@ export const getContactByName = async (
 };
 
 export const createContact = async (
-  contact: ContactToInsert,
+  contact: ContactToInsert
   // filePath: string
-)=> {
+) => {
   logger.info("creating a new contact");
-  
-   const data= await ContactModel.createContact(contact);
-   return{
-    data:data,
-    message:"contact create successfully  ",
-   } 
-  
+
+  const data = await ContactModel.createContact(contact);
+  return {
+    data: data,
+    message: "contact create successfully  ",
+  };
 };
 
-export const updateContact = async (
-  contact: ContactToUpdate,
-  filePath: string
-)=> {
+export const updateContact = async (contact: ContactToUpdate) => {
   logger.info("getting contact by id");
+  console.log(contact);
+  const data = await ContactModel.updateContact(contact);
+  
 
-  try {
-    // check if the file exists
-    if (!fs.existsSync(filePath)) {
-      throw new Error("file not found ");
-    }
-
-    // uploads the image to cloudinary
-    // const result = await cloudinary.uploader.upload(filePath, {
-    //     resource_type: "image",
-    //     uplad_preset: "contact-manager",
-    //     use_filename: true,
-    //     invalidate: true,
-    //   });
-
-    // delete the file from server
-    fs.unlinkSync(filePath);
-
-    // create a new contact on the database
-    // const updateContact = await ContactModel.updateContact({
-    //     ...contact,
-    //     photo:result.url,
-    // });
-
-    // return{
-    // data:updateContact,
-    // message;"successfully updated a contact",
-    // };
-  } catch (error) {
-    // logs the error
-    logger.error(error);
-
-    // delete the file from the server
-    fs.unlinkSync(filePath);
-    return {
-      message: "could not update the contact",
-    };
-  }
+  return {
+    data:data,
+    message: " update the contact",
+  };
 };
 
 export const deleteContact = async (id: number): Promise<Success<Contact>> => {

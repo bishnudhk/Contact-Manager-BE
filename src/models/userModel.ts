@@ -18,8 +18,10 @@ class UserAccount {
   }
 
   public static async createUser(user: UserToCreate): Promise<UserToGet> {
+    console.log(user);
+  
     const newUser: UserToGet = await db(UserAccount.table).insert(user, [
-      "user_id",
+      "id",
       "email",
     ]);
 
